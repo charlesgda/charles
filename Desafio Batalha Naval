@@ -1,0 +1,85 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+const int TAMANHO_TABULEIRO = 5; // Tamanho do tabuleiro (5x5)
+const char VAZIO = '~';
+const char NAVIO = 'N';
+const char ACERTO = 'X';
+const char ERRO = 'O';
+
+// Função para inicializar o tabuleiro com espaços vazios
+void inicializarTabuleiro(vector<vector<char>>& tabuleiro) {
+    for (int i = 0; i < TAMANHO_TABULEIRO; ++i) {
+        for (int j = 0; j < TAMANHO_TABULEIRO; ++j) {
+            tabuleiro[i][j] = VAZIO;
+        }
+    }
+}
+
+// Função para mostrar o tabuleiro ao jogador
+void mostrarTabuleiro(const vector<vector<char>>& tabuleiro) {
+    cout << "  ";
+    for (int i = 0; i < TAMANHO_TABULEIRO; ++i) {
+        cout << i << " ";
+    }
+    cout << endl;
+    for (int i = 0; i < TAMANHO_TABULEIRO; ++i) {
+        cout << i << " ";
+        for (int j = 0; j < TAMANHO_TABULEIRO; ++j) {
+            cout << tabuleiro[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+// Função para posicionar um navio aleatoriamente
+void posicionarNavio(vector<vector<char>>& tabuleiro, int tamanhoNavio) {
+    bool posicionado = false;
+    while (!posicionado) {
+        int dir = rand() % 2; // 0 para horizontal, 1 para vertical
+        int x = rand() % TAMANHO_TABULEIRO;
+        int y = rand() % TAMANHO_TABULEIRO;
+
+        // Verificar se há espaço suficiente
+        bool cabem = true;
+        if (dir == 0) { // horizontal
+            if (y + tamanhoNavio > TAMANHO_TABULEIRO) continue;
+            for (int i = 0; i < tamanhoNavio; ++i) {
+                if (tabuleiro[x][y + i] == NAVIO) {
+                    cabem = false;
+                    break;
+                }
+            }
+            if (cabem) {
+                for (int i = 0; i < tamanhoNavio; ++i) {
+                    tabuleiro[x][y + i] = NAVIO;
+                }
+                posicionado = true;
+            }
+        } else { // vertical
+            if (x + tamanhoNavio > TAMANHO_TABULEIRO) continue;
+            for (int i = 0; i < tamanhoNavio; ++i) {
+                if (tabuleiro[x + i][y] == NAVIO) {
+                    cabem = false;
+                    break;
+                }
+            }
+            if (cabem) {
+                for (int i = 0; i < tamanhoNavio; ++i) {
+                    tabuleiro[x + i][y] = NAVIO;
+                }
+                posicionado = true;
+            }
+        }
+    }
+}
+
+int main() {
+    srand(time(0));
+    vector<vector<char>> tabuleiro(TAMANHO_TABULEIRO, vector<char>(TAMANHO_TABULEIRO));
+    vector<vector<char>> tabuleiroVisivel(TAMANHO_TABULEIRO, vector<char>(TAMANHO_TABULEIRO, VAZIO
