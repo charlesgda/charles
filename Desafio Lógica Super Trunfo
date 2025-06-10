@@ -1,0 +1,94 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+// Estrutura para representar uma carta
+struct Carta {
+    string nome;
+    int atributo1;
+    int atributo2;
+    int atributo3;
+};
+
+// Função para exibir uma carta
+void mostrarCarta(const Carta& carta) {
+    cout << "Nome: " << carta.nome << endl;
+    cout << "Atributo 1: " << carta.atributo1 << endl;
+    cout << "Atributo 2: " << carta.atributo2 << endl;
+    cout << "Atributo 3: " << carta.atributo3 << endl;
+}
+
+// Função para determinar o vencedor com base no atributo escolhido
+int compararCartas(const Carta& c1, const Carta& c2, int atributoEscolhido) {
+    int valor1, valor2;
+    switch (atributoEscolhido) {
+        case 1:
+            valor1 = c1.atributo1;
+            valor2 = c2.atributo1;
+            break;
+        case 2:
+            valor1 = c1.atributo2;
+            valor2 = c2.atributo2;
+            break;
+        case 3:
+            valor1 = c1.atributo3;
+            valor2 = c2.atributo3;
+            break;
+        default:
+            return 0; // Caso inválido
+    }
+    if (valor1 > valor2) return 1;
+    else if (valor1 < valor2) return 2;
+    else return 0; // Empate
+}
+
+int main() {
+    // Criando algumas cartas de exemplo
+    vector<Carta> cartas = {
+        {"Dragão", 8, 5, 7},
+        {"Fênix", 6, 9, 4},
+        {"Unicórnio", 4, 6, 8}
+    };
+
+    cout << "Bem-vindo ao Desafio Super Trunfo!\n";
+
+    // Exibir cartas
+    for (int i = 0; i < cartas.size(); ++i) {
+        cout << "\nCarta " << i + 1 << ":\n";
+        mostrarCarta(cartas[i]);
+    }
+
+    int cartaJogador, cartaComputador, atributoEscolhido;
+
+    // Seleção de cartas
+    cout << "\nEscolha uma carta pelo número (1-" << cartas.size() << "): ";
+    cin >> cartaJogador;
+    cartaJogador--; // ajustar para índice
+
+    cartaComputador = rand() % cartas.size();
+
+    cout << "\nSua carta:\n";
+    mostrarCarta(cartas[cartaJogador]);
+
+    cout << "\nCarta do computador:\n";
+    mostrarCarta(cartas[cartaComputador]);
+
+    // Escolha do atributo
+    cout << "\nEscolha o atributo para comparar (1 - Atributo 1, 2 - Atributo 2, 3 - Atributo 3): ";
+    cin >> atributoEscolhido;
+
+    int resultado = compararCartas(cartas[cartaJogador], cartas[cartaComputador], atributoEscolhido);
+
+    if (resultado == 1) {
+        cout << "\nVocê venceu!\n";
+    } else if (resultado == 2) {
+        cout << "\nVocê perdeu!\n";
+    } else {
+        cout << "\nEmpate!\n";
+    }
+
+    return 0;
+}
