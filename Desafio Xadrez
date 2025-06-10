@@ -1,0 +1,93 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+// Representa uma posição no tabuleiro
+struct Posicao {
+    int linha;
+    int coluna;
+};
+
+// Verifica se a posição está dentro dos limites do tabuleiro
+bool posicaoValida(Posicao pos) {
+    return pos.linha >= 0 && pos.linha < 8 && pos.coluna >= 0 && pos.coluna < 8;
+}
+
+// Movimento do Peão
+bool movimentoPeao(Posicao origem, Posicao destino, bool branco) {
+    int direcao = branco ? 1 : -1; // Peões brancos movem para cima, pretos para baixo
+    if (destino.coluna == origem.coluna) {
+        // Movimento de uma casa para frente
+        if (destino.linha - origem.linha == direcao) {
+            return true;
+        }
+        // Movimento de duas casas na primeira jogada
+        if ((branco && origem.linha == 1) || (!branco && origem.linha == 6)) {
+            if (destino.linha - origem.linha == 2 * direcao) {
+                return true;
+            }
+        }
+    }
+    // Captura diagonal
+    if (abs(destino.coluna - origem.coluna) == 1 && destino.linha - origem.linha == direcao) {
+        return true;
+    }
+    return false;
+}
+
+// Movimento da Torre
+bool movimentoTorre(Posicao origem, Posicao destino) {
+    // Torre se move em linha reta
+    if (destino.linha == origem.linha || destino.coluna == origem.coluna) {
+        return true;
+    }
+    return false;
+}
+
+// Movimento do Bispo
+bool movimentoBispo(Posicao origem, Posicao destino) {
+    // Bispo se move na diagonal
+    if (abs(destino.linha - origem.linha) == abs(destino.coluna - origem.coluna)) {
+        return true;
+    }
+    return false;
+}
+
+// Movimento da Rainha
+bool movimentoRainha(Posicao origem, Posicao destino) {
+    // Rainha combina movimento da torre e do bispo
+    if (movimentoTorre(origem, destino) || movimentoBispo(origem, destino)) {
+        return true;
+    }
+    return false;
+}
+
+// Movimento do Rei
+bool movimentoRei(Posicao origem, Posicao destino) {
+    // Rei se move uma casa em qualquer direção
+    if (abs(destino.linha - origem.linha) <= 1 && abs(destino.coluna - origem.coluna) <= 1) {
+        return true;
+    }
+    return false;
+}
+
+// Movimento do Cavalo
+bool movimentoCavalo(Posicao origem, Posicao destino) {
+    int deltaLinha = abs(destino.linha - origem.linha);
+    int deltaColuna = abs(destino.coluna - origem.coluna);
+    if ((deltaLinha == 2 && deltaColuna == 1) || (deltaLinha == 1 && deltaColuna == 2)) {
+        return true;
+    }
+    return false;
+}
+
+int main() {
+    Posicao origem = {0, 0}; // exemplo de posição inicial
+    Posicao destino = {2, 0}; // exemplo de destino
+
+    // Exemplo de uso: verificar movimento do cavalo
+    if (movimentoCavalo(origem, destino)) {
+        cout << "Movimento válido de Cavalo!" << endl;
+    } else {
